@@ -12,6 +12,8 @@ About :
 
 Conditions:
     NO SPECIAL CHARACTERS ALLOWED.
+    Case differentiation is not done.(Not case-sensitive).
+    Eg : the,The and tHe are considered to be the same.
     A space is necessary after entering a word.
     User input is to be typed in user.txt file (Do not enter . , : , ; , ' , " or any other special characters).
     To run use : gcc proj.c src.c
