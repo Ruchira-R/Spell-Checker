@@ -40,8 +40,8 @@ int search(node *root, char *key)
     return 0;
 }
 
-/*Insert node is to insert all the words in the dictionary onto the trie tree.
-Each and every node in the dictionary.txt file are passed as key and are mapped onto the trie
+/*Insert node is to insert all the words in the dictionary.txt file onto the trie tree.
+Each and every word in the dictionary.txt file are passed as key and are mapped onto the trie
 tree.*/
 node *insert(node *root, char *key)
 {
@@ -76,8 +76,8 @@ node *create()
     return n;
 }
 
-/*This function is used to parse through the dictionary.txt file and pass every word in this file 
-as key to the insert() function which maps the word onto the trie tree*/
+/*This function parses through the dictionary.txt file and passes every word in this file 
+as key to the insert() function which maps it onto the trie tree*/
 void dict_create(node *root)
 {
     FILE *fp;
@@ -94,8 +94,8 @@ void dict_create(node *root)
     fclose(fp);
 }
 
-/*The last node function is used to check whether or not a given node has any children
-returns 1 if true,0 otherwise*/
+/*The last node function is used to check whether or not a given node has any children.
+Returns 1 if true,0 otherwise*/
 int last_node(node *temp)
 {
     int i;
@@ -109,9 +109,9 @@ int last_node(node *temp)
     return 1;
 }
 
-/*The suggest function is used to find the probable words to replace the misspelt word.
-It does its job by doing a prefix search on the trie tree created and calls rec_sug() recursively
-to find atmost four words to replace the word.*/
+/*The suggest function is used to find probable words to replace the misspelt word.
+It does it's job by doing a prefix search on the trie tree created and calls rec_sug() recursively
+to find atmost four words to replace the given misspelt word.*/
 int suggest(node *root, char *key)
 {
     node *temp = root;
@@ -138,12 +138,12 @@ int suggest(node *root, char *key)
     }
     if (!last)
     {
-        count = 0;
+        count = 0; // count is initialzied to zero after suggest() is called on a misspelt word
         rec_sug(temp, str);
     }
 }
 
-/*A recursive function which is used to find all the probable words with a given prefix.
+/*A recursive function which is used to find all probable words with a given prefix.
 This function is called when the last letter of the given prefix is not a last node, 
 suggesting that there are more words with the given prefix*/
 void rec_sug(node *root, char *key)
@@ -179,7 +179,7 @@ void rec_sug(node *root, char *key)
 }
 
 /*Used to read through the user input file user.txt and find the misspelt words 
-and pass the words' prefix to suggest() function which takes care of printing the probable words.*/
+and pass it's prefix to the suggest() function which takes care of printing out the probable words.*/
 void user_input(node *root)
 {
     FILE *fp;
