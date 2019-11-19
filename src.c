@@ -3,7 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "trie.h"
+
+//count is used to limit the number of words that are suggested
 int count = 1;
+
+/*Search function is used to search for a given word in the trie tree.
+Each and every word in the user.txt file(input file) are passed as key in the search function 
+to check whether the given word exists in the tree or not.Return 1 if true, 0 if otherwise.*/
 int search(node *root, char *key)
 {
     node *t = root;
@@ -33,6 +39,10 @@ int search(node *root, char *key)
     }
     return 0;
 }
+
+/*Insert node is to insert all the words in the dictionary onto the trie tree.
+Each and every node in the dictionary.txt file are passed as key and are mapped onto the trie
+tree.*/
 node *insert(node *root, char *key)
 {
     int l = strlen(key);
@@ -51,6 +61,9 @@ node *insert(node *root, char *key)
     temp->isLeafNode = 1;
     return root;
 }
+
+/*Create is used to allocate memory for a new node that is created in the trie tree.*/
+
 node *create()
 {
     node *n = (node *)malloc(sizeof(node));
@@ -62,23 +75,9 @@ node *create()
     }
     return n;
 }
-void print_it(node *root, char str[], int level)
-{
-    if (root->isLeafNode)
-    {
-        str[level] = '\0';
-        printf("%s\n", str);
-    }
-    int i;
-    for (i = 0; i < 26; i++)
-    {
-        if (root->all[i])
-        {
-            str[level] = i + 'a';
-            print_it(root->all[i], str, level + 1);
-        }
-    }
-}
+
+/*This function is used to parse through the dictionary.txt file and pass every word in this file 
+as key to the insert() function which maps the word onto the trie tree*/
 void dict_create(node *root)
 {
     FILE *fp;
@@ -94,6 +93,9 @@ void dict_create(node *root)
 
     fclose(fp);
 }
+
+/*The last node function is used to check whether or not a given node has any children
+returns 1 if true,0 otherwise*/
 int last_node(node *temp)
 {
     int i;
@@ -106,6 +108,10 @@ int last_node(node *temp)
     }
     return 1;
 }
+
+/*The suggest function is used to find the probable words to replace the misspelt word.
+It does its job by doing a prefix search on the trie tree created and calls rec_sug() recursively
+to find atmost four words to replace the word.*/
 int suggest(node *root, char *key)
 {
     node *temp = root;
@@ -125,8 +131,8 @@ int suggest(node *root, char *key)
             return -1;
     }
     int word = (temp->isLeafNode == 1); // prefix as a word
-    int last = last_node(temp);         //prefix is last node of a tree
-    if (word && last)
+    int last = last_node(temp);         //prefix is a last node of the tree
+    if (word && last)     
     {
         return -1;
     }
@@ -137,6 +143,9 @@ int suggest(node *root, char *key)
     }
 }
 
+/*A recursive function which is used to find all the probable words with a given prefix.
+This function is called when the last letter of the given prefix is not a last node, 
+suggesting that there are more words with the given prefix*/
 void rec_sug(node *root, char *key)
 {
     int i, j = 0;
@@ -168,15 +177,18 @@ void rec_sug(node *root, char *key)
         }
     }
 }
+
+/*Used to read through the user input file user.txt and find the misspelt words 
+and pass the words' prefix to suggest() function which takes care of printing the probable words.*/
 void user_input(node *root)
 {
     FILE *fp;
     char *c;
     char sug[20];
     char str[200];
-    int i = 0,j,l, sug_out,error_out=0;
-
-    fp = fopen("user.txt", "r");
+    int i = 0 , j , l , sug_out , error_out=0 ; // sug_out gives the output of suggest and error_out is to print the erroneous words
+    
+    fp = fopen("user.txt", "r"); 
     while (fgets(str, 200, fp) != NULL)
     {
         c = strtok(str, " ");
@@ -196,21 +208,23 @@ void user_input(node *root)
             i = search(root, c);
             if (!i)
             {
-          printf("\n\n");
-          error_out++;
-          if(error_out==1) printf("ERRONEOUS WORDS : \n\n");
-          printf("%s : ", c);        
-          sug_out = suggest(root, sug);
-          if(sug_out == -1)
+                    printf("\n\n");
+                    error_out++;
+                    if(error_out==1) printf("ERRONEOUS WORDS : \n\n");
+                    printf("%s : ", c);        
+                    sug_out = suggest(root, sug);
+                    if(sug_out == -1)
                 {
-                    printf("Sorry no matching strings found!");
+                            printf("Sorry no matching strings found!");
                 }
-                printf("\n");
+                    printf("\n");
             }
             c = strtok(NULL, " ");
         }
     }
 }
+
+/*This function is used to free all the nodes in the trie tree created*/
 void free_trie(node *root)
 {
     int i;
