@@ -2,10 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "trie.h"
 
 //count is used to limit the number of words that are suggested
-int count = 1;
+int count = 0;
 
 /*Search function is used to search for a given word in the trie tree.
 Each and every word in the user.txt file(input file) are passed as key in the search function 
@@ -132,13 +133,13 @@ int suggest(node *root, char *key)
     }
     int word = (temp->isLeafNode == 1); // prefix as a word
     int last = last_node(temp);         //prefix is a last node of the tree
-    if (word && last)     
+    if (word && last)
     {
         return -1;
     }
     if (!last)
     {
-        count = 0; // count is initialzied to zero after suggest() is called on a misspelt word
+        count = 0; // count is initialzied to one after suggest() is called on a misspelt word
         rec_sug(temp, str);
     }
 }
@@ -184,17 +185,19 @@ void user_input(node *root)
 {
     FILE *fp;
     char *c;
-    char sug[20];
+    char sug[20],error_word[30];
     char str[200];
-    int i = 0 , j , l , sug_out , error_out=0 ; // sug_out gives the output of suggest and error_out is to print the erroneous words
-    
-    fp = fopen("user.txt", "r"); 
+    int i = 0, j, l, sug_out, error_out = 0; // sug_out gives the output of suggest and error_out is to print the erroneous words
+
+    fp = fopen("user.txt", "r");
     while (fgets(str, 200, fp) != NULL)
     {
         c = strtok(str, " ");
         while (c != NULL)
         {
             l = strlen(c);
+            c = to_lower(c);
+            strcpy(error_word,c);
             if (l >= 4)
             {
                 strncpy(sug, c, 4);
@@ -208,16 +211,17 @@ void user_input(node *root)
             i = search(root, c);
             if (!i)
             {
-                    printf("\n\n");
-                    error_out++;
-                    if(error_out==1) printf("ERRONEOUS WORDS : \n\n");
-                    printf("%s : ", c);        
-                    sug_out = suggest(root, sug);
-                    if(sug_out == -1)
+                printf("\n\n");
+                error_out++;
+                if (error_out == 1)
+                    printf("ERRONEOUS WORDS : \n\n");
+                printf("%s : ",error_word);
+                sug_out = suggest(root, sug);
+                if (sug_out == -1)
                 {
-                            printf("Sorry no matching strings found!");
+                    printf("Sorry no matching strings found!");
                 }
-                    printf("\n");
+                printf("\n");
             }
             c = strtok(NULL, " ");
         }
@@ -237,4 +241,22 @@ void free_trie(node *root)
     }
 
     free(root);
+}
+
+/*Convert lowercase to uppercase*/
+char *to_lower(char *str)
+{
+    int i = 0;
+    char c;
+    int l = strlen(str);
+    char s[l], *p;
+    while (i < l)
+    {
+        c = tolower(*str);
+        s[i] = c;
+        *str++;
+        i++;
+    }
+    p = s;
+    return p;
 }
