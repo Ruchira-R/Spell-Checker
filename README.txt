@@ -11,8 +11,8 @@ About :
     four characters of the selected word, and printing atmost four words that can replace the misspelt word on the terminal.
 
 Conditions:
-    NO UPPER CASE ALLOWED OR ANY OTHER SPECIAL CHARACTERS.
+    NO SPECIAL CHARACTERS ALLOWED.
     A space is necessary after entering a word.
-    User input is to be typed in user.txt file (Do not enter . , : , ; , ' , " or any special characters)
+    User input is to be typed in user.txt file (Do not enter . , : , ; , ' , " or any other special characters).
     To run use : gcc proj.c src.c
     
