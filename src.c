@@ -187,7 +187,7 @@ void user_input(node *root)
     char *c;
     char sug[20],error_word[30];
     char str[200];
-    int i = 0, j, l, sug_out, error_out = 0; // sug_out gives the output of suggest and error_out is to print the erroneous words
+    int i = 0, j, l, sug_out, error_out = 0; // sug_out gives the output of suggest and error_out is to print "erroneous words"
 
     fp = fopen("user.txt", "r");
     while (fgets(str, 200, fp) != NULL)
