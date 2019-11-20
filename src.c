@@ -258,5 +258,6 @@ char *to_lower(char *str)
         i++;
     }
     p = s;
+    s[l]='\0';
     return p;
 }
